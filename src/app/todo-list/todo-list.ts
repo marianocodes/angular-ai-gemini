@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Todo } from '../todo';
+import { TodoService } from '../services/todo';
 import { TodoItemComponent } from '../todo-item/todo-item';
 
 @Component({
@@ -12,28 +12,22 @@ import { TodoItemComponent } from '../todo-item/todo-item';
   imports: [FormsModule, TodoItemComponent],
 })
 export class TodoListComponent {
-  todos = signal<Todo[]>([]);
+  private todoService = inject(TodoService);
+  public todos = this.todoService.todos;
   newTodoText = '';
 
   addTodo() {
     if (this.newTodoText.trim()) {
-      this.todos.update(todos => [
-        ...todos,
-        { id: Date.now(), text: this.newTodoText.trim(), isCompleted: false },
-      ]);
+      this.todoService.addTodo(this.newTodoText.trim());
       this.newTodoText = '';
     }
   }
 
   toggleCompletion(id: number) {
-    this.todos.update(todos =>
-      todos.map(todo =>
-        todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
-      )
-    );
+    this.todoService.toggleCompletion(id);
   }
 
   deleteTodo(id: number) {
-    this.todos.update(todos => todos.filter(todo => todo.id !== id));
+    this.todoService.deleteTodo(id);
   }
 }
