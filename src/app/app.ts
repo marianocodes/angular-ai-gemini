@@ -1,13 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TodoListComponent } from './todo-list/todo-list';
+import { HeaderComponent } from './header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TodoListComponent],
+  standalone: true,
+  imports: [RouterOutlet, TodoListComponent, HeaderComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss'],
 })
-export class App {
-  protected readonly title = signal('angular-gemini-ai');
-}
+export class App {}
